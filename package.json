@@ -2,6 +2,7 @@
   "name": "debug-nextjs",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@12.4.2",
   "scripts": {
     "postinstall": "node scripts/generate-images.mjs",
     "predev": "node scripts/generate-images.mjs",

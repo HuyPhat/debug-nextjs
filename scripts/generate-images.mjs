@@ -1,6 +1,6 @@
 // Generates the photos used by the store into public/images.
 // They are generated instead of committed to keep the repository small.
-// Run automatically by `npm install`, `npm run dev` and `npm run build`.
+// Run automatically by `pnpm install`, `pnpm dev` and `pnpm build`.
 
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'

@@ -22,10 +22,10 @@ A small e-commerce site built with **Next.js 16.3 (App Router, Turbopack) + Reac
 ## Run it
 
 ```bash
-npm install            # also generates the (intentionally huge) images into public/images
-npm run dev:utc        # dev server with TZ=UTC + LANG=en_US, like a production server
+pnpm install            # also generates the (intentionally huge) images into public/images
+pnpm dev:utc        # dev server with TZ=UTC + LANG=en_US, like a production server
 # performance numbers must come from a production build:
-npm run build && npm start
+pnpm build && pnpm start
 ```
 
 Use Node 20.9+ (tested with Node 22). Then, in Chrome DevTools → **Sensors**, set the locale to `vi-VN` and the time zone to `Asia/Ho_Chi_Minh` so the browser differs from the server.
@@ -47,7 +47,7 @@ Use Node 20.9+ (tested with Node 22). Then, in Chrome DevTools → **Sensors**, 
 - **Web Vitals HUD** (bottom right): live TTFB / FCP / LCP / CLS / slowest interaction for the current page load. Final values are also logged as `[web-vitals]` in the console.
 - **"HTML rendered on the server at …"** at the bottom of each page: if it changes on every reload, that page isn't cached.
 - **`[db]` logs** in the server terminal: one line per simulated database query, with its latency.
-- `npm run lint` flags some issues; `npm run build` prints the route table (`○ ● ƒ ◐`).
+- `pnpm lint` flags some issues; `pnpm build` prints the route table (`○ ● ƒ ◐`).
 
 ## Project map
 

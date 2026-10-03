@@ -5,10 +5,10 @@ Everything below is **observable behaviour**. Root causes and fixes are in [`03-
 Recommended setup:
 
 ```bash
-npm install
-npm run dev:utc        # dev server with TZ=UTC, like a real server
+pnpm install
+pnpm dev:utc        # dev server with TZ=UTC, like a real server
 # and, for performance numbers:
-npm run build && npm start
+pnpm build && pnpm start
 ```
 
 In Chrome, open **DevTools → Sensors**: set _Location_ to a place in Vietnam (or pick the time zone `Asia/Ho_Chi_Minh`) and _Locale_ to `vi-VN`. Keep the **Network** and **Console** panels open. The black box in the corner is a live Web Vitals readout, and the server terminal prints `[db]` lines for every "database" query.
@@ -28,7 +28,7 @@ Baseline measurements from the build this repo was verified with (headless Chrom
 
 ## R: "We only use one rendering mode"
 
-**R1. `npm run build` prints `ƒ (Dynamic)` for every route**, including `/about` (static text), `/_not-found` and the blog.
+**R1. `pnpm build` prints `ƒ (Dynamic)` for every route**, including `/about` (static text), `/_not-found` and the blog.
 <details><summary>Hint</summary>At least <b>three separate things</b> force dynamic rendering, and removing only the obvious one changes nothing. Look at the root layout first, then at how pages load their data.</details>
 
 **R2. Content that's identical for every visitor is regenerated on every request.** Reload `/blog/caring-for-linen` a few times and watch the "HTML rendered on the server at …" stamp and the `[db]` logs.
@@ -43,7 +43,7 @@ Baseline measurements from the build this repo was verified with (headless Chrom
 
 ## H: Hydration mismatches
 
-Run `npm run dev:utc`. Your browser should be in a different time zone and locale from the server (see Sensors above).
+Run `pnpm dev:utc`. Your browser should be in a different time zone and locale from the server (see Sensors above).
 
 **H1. Home page: "Hydration failed because the server rendered text didn't match the client".** It happens even when your time zone matches the server's.
 <details><summary>Hint</summary>Look at the flash-sale line. There are <b>three</b> independent reasons it can differ between server and browser.</details>
@@ -67,7 +67,7 @@ Run `npm run dev:utc`. Your browser should be in a different time zone and local
 
 ## C: Core Web Vitals
 
-Use Lighthouse (mobile) against `npm start`, or the Performance panel with 4× CPU and "Slow 4G".
+Use Lighthouse (mobile) against `pnpm start`, or the Performance panel with 4× CPU and "Slow 4G".
 
 **C1. LCP: the hero image paints extremely late.** It's the LCP element.
 <details><summary>Hint</summary>Check the file size, format, dimensions actually displayed, <code>loading</code> attribute, preload, and <code>fetchpriority</code>. Also check <code>next.config.ts</code>.</details>
@@ -82,9 +82,9 @@ Use Lighthouse (mobile) against `npm start`, or the Performance panel with 4× C
 <details><summary>Hint</summary>Profile one keystroke in the Performance panel. Look at what runs per keystroke, what runs <i>inside a sort comparator</i>, how many cards re-render, and what the click handler waits for synchronously.</details>
 
 **C5. Payload: `/products` ships ~978 KB of JS and a 429 KB HTML document.**
-<details><summary>Hint</summary>Run <code>npx next experimental-analyze</code>. Where do <code>moment</code> locales and full <code>lodash</code> come from? How much product data is serialised into the page, and is all of it needed?</details>
+<details><summary>Hint</summary>Run <code>pnpm exec next experimental-analyze</code>. Where do <code>moment</code> locales and full <code>lodash</code> come from? How much product data is serialised into the page, and is all of it needed?</details>
 
-`npm run lint` flags some of these for you.
+`pnpm lint` flags some of these for you.
 
 ---
 

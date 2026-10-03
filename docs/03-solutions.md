@@ -189,7 +189,7 @@ This is a consequence of H1–H3 plus K2. The text mismatch makes React discard 
 
 ### Diagnosis toolkit used here
 
-`npm run dev:utc` (`TZ=UTC LANG=en_US.UTF-8`) · DevTools → Sensors (locale + time zone) · dev overlay diff · `view-source:` vs Elements · disable JS · prod error `#418` with `args[]=text`.
+`pnpm dev:utc` (`TZ=UTC LANG=en_US.UTF-8`) · DevTools → Sensors (locale + time zone) · dev overlay diff · `view-source:` vs Elements · disable JS · prod error `#418` with `args[]=text`.
 
 ---
 
@@ -262,7 +262,7 @@ Also: pass the client only the fields it needs (not 600 full descriptions; preco
 
 - `moment` pulls in **140 locales** (a single 392 KB chunk shared with full `lodash`) on `/products`. Replace `fromNow()` with `Intl.RelativeTimeFormat` or a tree-shakable `date-fns` function. Better still, render an absolute date on the server with a pinned locale: relative "x ago" text is also time-dependent, so it's a potential hydration mismatch.
 - `lodash`: use native `new Set()` for `uniq` and drop `cloneDeep` entirely. If you really need lodash, use per-method imports (`lodash-es`).
-- Verify with `npx next experimental-analyze` (the Turbopack bundle analyzer).
+- Verify with `pnpm exec next experimental-analyze` (the Turbopack bundle analyzer).
 - The 429 KB HTML comes from 600 SSR'd cards plus the same 600 products serialised again in the RSC payload. Paginate, and send only the card fields.
 
 ---
@@ -319,12 +319,12 @@ The original complaint ("customers saw old prices") is a **freshness** problem. 
 
 ## Verification checklist
 
-- [ ] `npm run build` shows a mix: `○ /about`, `● /blog/[slug]` (with params listed), ISR revalidate times on catalogue routes (or `◐` with Cache Components), and `ƒ /account` only.
+- [ ] `pnpm build` shows a mix: `○ /about`, `● /blog/[slug]` (with params listed), ISR revalidate times on catalogue routes (or `◐` with Cache Components), and `ƒ /account` only.
 - [ ] `curl -sI` on a static page: `s-maxage=…`; ISR page: `s-maxage=N, stale-while-revalidate=…`; `/account`: `private, no-cache, no-store…`; `/_next/static/*.js`: `public, max-age=31536000, immutable`.
 - [ ] Repeat requests to ISR pages return `x-nextjs-cache: HIT` (or `STALE` → `REVALIDATED`).
 - [ ] The "HTML rendered on the server at …" stamp stays the same between reloads on cacheable pages, and the `[db]` log stays quiet.
-- [ ] No hydration errors in dev with `npm run dev:utc` + Sensors set to `vi-VN` / `Asia/Ho_Chi_Minh`, **and** with JS disabled the page still shows real content.
+- [ ] No hydration errors in dev with `pnpm dev:utc` + Sensors set to `vi-VN` / `Asia/Ho_Chi_Minh`, **and** with JS disabled the page still shows real content.
 - [ ] The Network panel shows each image downloaded once, as a small optimised format.
 - [ ] Web Vitals HUD / Lighthouse mobile: LCP < 2.5 s, CLS < 0.1, INP < 200 ms (4× CPU), TTFB < 0.8 s.
-- [ ] `npm run lint` is clean (`no-img-element`, `no-sync-scripts`).
+- [ ] `pnpm lint` is clean (`no-img-element`, `no-sync-scripts`).
 - [ ] Setting a name and currency on `/account` still personalizes the site.
